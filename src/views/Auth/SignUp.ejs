@@ -1,0 +1,96 @@
+<%- include("../partials/navBar.ejs") %>
+
+<body>
+    
+    <div class="ui ">
+            <form class="ui fluid form" action="/signup" method="post">
+                <div class="ui six column grid centered">
+                    <div class="five column row">
+                        <h3>Sign Up User</h3>
+                    </div>
+                    <div class="three column row">
+                        <div class="column">
+                            <div class="field">
+                                <label for="">Username</label>
+                                <input type="text" name="username" >
+                                <% if(usernameMsg) { %>
+                                    <div class="ui pointing red basic label">
+                                         <%=usernameMsg %>
+                                        </div>
+                                    <% } %>
+                                <% if(usernameExistedMsg) {%>
+                                    <div class="ui pointing red basic label">
+                                        <%= usernameExistedMsg %>
+                                    </div>
+                                <% } %>        
+
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label for="">Password</label>
+                                <input type="password" name="password" >
+                                <% if(passwordMessage) { %>
+                                    <div class="ui pointing red basic label">
+                                        <%=passwordMessage %>
+                                    </div>
+                                    
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="three column row">
+                        <div class="column">
+                            
+                            <div class="field">
+                                <label for="">First Name</label>
+                                <input type="text" name="firstName">
+                                <% if(firstNameMsg) { %>
+                                    <div class="ui pointing red basic label">
+                                        <%= firstNameMsg %>
+                                      </div>
+                                <% } %>
+                                
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="field">
+                                <label for="">Last Name</label>
+                                <input type="text" name="lastName">
+                                <% if(lastNameMsg) { %>
+                                    <div class="ui pointing red basic label">
+                                        <%= lastNameMsg %>
+                                      </div>
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="three column row">
+                        <div class="column">
+                            <div class="field">
+                                <label for="">Email Address</label>
+                                <input type="email" name="email" id="">
+                                <% if(emailmsg) { %>
+                                    <div class="ui pointing red basic label">
+                                    <%= emailmsg %>
+                                    </div>    
+                                <% } %>
+                                <% if(emailExistedMsg) {%>
+                                    <div class="ui pointing red basic label">
+                                        <%= emailExistedMsg %>
+                                    </div>
+                                <% } %> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui button" tabindex="0">
+                        <input type="Submit" value="Signup">
+                    </div>
+                </div>
+            </form>
+        
+        
+        
+
+    </div>
+</body>

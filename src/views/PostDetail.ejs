@@ -1,0 +1,62 @@
+<%- include('partials/navBar') %>
+<% if(postDetail) { %> 
+<div class="ui cards">
+    <div class="card">
+      <div class="content">
+        <img class="right floated mini ui image" src="https://semantic-ui.com/images/avatar/small/jenny.jpg">
+        <div class="header">
+        Post By :  <%=  postDetail.userId.username %>
+        </div>
+        
+        <div class="description">
+          Email : <%= postDetail.userId.email %> <br>
+          Name  : <%= postDetail.userId.firstName + ' ' + postDetail.userId.lastName %>
+        </div>
+      </div>
+      <div class="extra content">
+        <div class="ui bottom attached button">
+            <i class="add icon"></i>
+            Add Friend
+          </div>
+      </div>
+    </div>
+ </div>
+ <div class="ui divider"></div>
+<div class="ui container">
+ <div class="ui items">
+    <div class="item">
+      
+      <div class="middle aligned content">
+        <div class="header">
+        Title :  <%= postDetail.title %>
+        </div>
+        <div class="description">
+         <h4> Description : <%= postDetail.description %> </h4>
+        </div>
+      </div>
+   </div>
+</div>
+
+
+    <div class="ui comments">
+        <div class="comment">
+          <a class="avatar">
+            <img src="/images/avatar/small/stevie.jpg">
+          </a>
+          <div class="content">
+            <a class="author">Stevie Feliciano</a>
+            <div class="metadata">
+              <div class="date">2 days ago</div>
+              <div class="rating">
+                <i class="star icon"></i>
+                5 Faves
+              </div>
+            </div>
+            <div class="text">
+              Hey guys, I hope this example comment is helping you read this documentation.
+            </div>
+          </div>
+        </div>
+      </div>
+    
+ <% } %>   

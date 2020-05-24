@@ -1,0 +1,27 @@
+<%- include("header.ejs")  %>
+<body>
+   
+    <div class="ui pointing menu">
+        <a class="item <%= path === '/home' ? 'active': '' %>" href="/home">
+          Home
+        </a>
+        <a class="item <%= path === '/about' ? 'active' : '' %>" href="/about" >
+          About Us
+        </a>
+        <a class="item <%= path === '/blogpost' ? 'active' : '' %>" href="/blogpost" >
+          Blog Post
+        </a>
+        <a class="item <%= path === '/posts' ? 'active' : '' %>" href="/posts">
+        Posts
+      </a>
+        <div class="right menu">
+          <a class="item <%= path === '/login' ? 'active' : '' %>" href="/login" >
+            Sign In
+          </a>
+          <a class="item <%= path === '/signup' ? 'active' : '' %>" href="/signup">
+              SignUp
+          </a>
+        </div>
+      </div>
+  
+</body>
