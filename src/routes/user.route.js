@@ -8,13 +8,14 @@ const router = express.Router();
 // })
 
 router.route('/login')
-      .get(userCtrl.Login)
+      .get(userCtrl.GetLogin)
+      .post(userCtrl.LoginUser)
 
 router.route('/signup')
-      .post(userCtrl.validArray, userCtrl.UserValidation, userCtrl.SigupUser)
+      .post(userCtrl.validSignupArray, userCtrl.UserValidation, userCtrl.SigupUser)
       .get(userCtrl.SignUpPage)
 
 router.route('/logout')
-      .get(authRoute, userCtrl.SignOut)      
+      .get(userCtrl.PostLogout)
 
 module.exports = router;

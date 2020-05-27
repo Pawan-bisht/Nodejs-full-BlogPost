@@ -1,71 +1,77 @@
 const Post = require("../models/post");
 const User = require("../models/user");
-const CreatePost = async (req, res)=>{
+const CreatePost = async (req, res) => {
+
     const post = new Post(req.body);
-    try
-    {
+    try {
         let resPost = await post.save();
-        res.status(201).send({ resPost });
-    }
-    catch(e)
-    {
+        res.status(201).send({
+            resPost
+        });
+    } catch (e) {
         res.status(404).send(e);
     }
 }
 
-const GetAllPosts = async(req, res)=>{
-    try
-    {
-        const posts = await Post.find({}).populate(
-            {
+const GetAllPosts = async (req, res) => {
+    let isLoggedIn = req.session.isLoggedIn;
+    try {
+        const posts = await Post.find({}).populate({
                 path: 'userId'
             })
-            .sort({ createdAt : -1 }).exec(); 
+            .sort({
+                createdAt: -1
+            }).exec();
         //res.send({posts});    
-        res.render('Posts', { 
+        res.render('Posts', {
             posts,
-            path : '/posts' } );
-    }
-    catch(e)
-    {
+            path: '/posts',
+            isAuthenticate: isLoggedIn
+        });
+    } catch (e) {
         res.status(404).send(e);
     }
 }
 
-const getAUserPosts = async (req, res) =>{
-    try{
+const getAUserPosts = async (req, res) => {
+    try {
         let user = await User.findById(req.params.id);
         console.log(user);
-        await user.populate({ path : "posts" }).execPopulate();
+        await user.populate({
+            path: "posts"
+        }).execPopulate();
         console.log(user.posts);
-        res.send({ posts :user.posts })
-    }
-    catch(e)
-    {
+        res.send({
+            posts: user.posts
+        })
+    } catch (e) {
         res.status(404).send(e);
-    }  
+    }
 }
 
-const BlogPosts = (req, res) =>{
-    res.render('BlogPost',{
-        path : '/blogpost'
+const BlogPosts = (req, res) => {
+    let isLoggedIn = req.session.isLoggedIn;
+    res.render('BlogPost', {
+        path: '/blogpost',
+        isAuthenticate: isLoggedIn
     })
 }
 
-const GetAPostDetail = async(req, res)=>{
+const GetAPostDetail = async (req, res) => {
     let id = req.params.id.trim();
     console.log(id);
-    try
-    {
-        let postDetail = await Post.findOne({ _id : id }).populate({ path:'userId'});
-        
-        res.render('PostDetail',{
+    try {
+        let postDetail = await Post.findOne({
+            _id: id
+        }).populate({
+            path: 'userId'
+        });
+
+        res.render('PostDetail', {
             postDetail,
-            path : null
+            path: null
         })
-    }
-    catch(e)
-    {
+    } catch (e) {
         res.status(404).send(e);
     }
 }

@@ -1,9 +1,11 @@
-const GetAboutPage = (req, res)=>{
-    res.render('About',{
-        path : '/about'
+const GetAboutPage = (req, res) => {
+    let isLoggedIn = req.session.isLoggedIn;
+    res.render('About', {
+        path: '/about',
+        isAuthenticate: isLoggedIn
     })
 }
 
-module.exports ={
+module.exports = {
     GetAboutPage
 }

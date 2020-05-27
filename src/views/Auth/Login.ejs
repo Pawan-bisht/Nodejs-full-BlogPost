@@ -1,43 +1,43 @@
 <%- include("../partials/navBar.ejs") %>
+
 <body>
+
     <div class="ui container">
         <% if(message) { %>
-            <div class="ui success message">
-                <i class="close icon"></i>
-                <div class="header">
-                  Your user registration was successful.
-                </div>
-                <p>You may now log-in with the username you have chosen</p>
+        <div class="ui success message">
+            <i class="close icon"></i>
+            <div class="header">
+                Your user registration was successful.
             </div>
-            <% } %>
-        <form action="" method="post" class="ui form">
-            
+            <p>You may now log-in with the username you have chosen</p>
+        </div>
+        <% } %>
+        <form action="/login" method="POST" class="ui form">
+
             <div class="ui four column centered grid">
                 <div class="three column row">
                     <h3 class="ui dividing header">Login</h3>
                 </div>
-                
+
                 <div class="three column row">
-                <div class="field column">
-                    <label for="">Username</label>
-                    <input type="text" name="Username" id="Username">
-                </div>
+                    <div class="field column">
+                        <label for="">Username</label>
+                        <input type="text" name="Username" id="Username">
+                    </div>
                 </div>
 
                 <div class="three column row">
-                <div class="field column">
-                    <label for="">Password</label>
-                    <input type="password" name="password">
-                </div>
+                    <div class="field column">
+                        <label for="">Password</label>
+                        <input type="password" name="password">
+                    </div>
                 </div>
 
-           
-            <div class="five column row">
-            <div class="ui button" tabindex="0">Log In</div>
+                <div class="five column row">
+                    <input type="submit" value="Login">
+                </div>
             </div>
-        </div>
         </form>
     </div>
     </div>
 </body>
-    
