@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.route('/login')
       .get(userCtrl.GetLogin)
-      .post(userCtrl.LoginUser)
+      .post(userCtrl.validLoginArray, userCtrl.UserLoginValidation, userCtrl.LoginUser)
 
 router.route('/signup')
       .post(userCtrl.validSignupArray, userCtrl.UserValidation, userCtrl.SigupUser)

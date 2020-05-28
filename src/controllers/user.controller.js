@@ -29,19 +29,42 @@ const PostLogout = (req, res) => {
 
 //------------Login controller--------------------------
 const GetLogin = (req, res) => {
-    let message = req.flash("message");
+
+    if (req.session.user)
+        res.redirect("/home");
+
+    let errorMessage = req.flash("validError");
     // console.log(req.get("Cookie"))
     // let isLoggedIn = req.get("Cookie").split(';')[0].trim().split('=')[1] === 'true';
     // let isLoggedIn = req.get("Cookie").includes("true") ? true : false;
+    // console.log("Get login", message);
+    let passwordMessage = null,
+        usernameMessage = null;
     let isLoggedIn = req.session.isLoggedIn;
-    console.log("logged in", req.session);
-    if (message.length == 0)
+    // console.log("logged in", req.session);
+    if (errorMessage.length === 0)
+        errorMessage = null;
+    else {
+        errorMessage.forEach(object => {
+            switch (object.param) {
+                case 'password':
+                    passwordMessage = object.msg;
+                    break;
+                case 'username':
+                    usernameMessage = object.msg;
+            }
+        })
+    }
+    let message = req.flash("error");
+    console.log(errorMessage);
+    if (message.length === 0)
         message = null;
-
     // console.log(req.get("Cookie"));
     res.render("Auth/Login", {
         path: "/login",
-        message: message,
+        usernameMessage,
+        message,
+        passwordMessage,
         isAuthenticate: isLoggedIn
     });
 }
@@ -51,10 +74,36 @@ const validLoginArray = [
     check('password', "Password can't be empty").notEmpty()
 ]
 
-const LoginUser = (req, res) => {
+const UserLoginValidation = (req, res, next) => {
+    let error;
+    error = validationResult(req);
+    //console.log("error is",error.isEmpty()); 
 
-    req.session.isLoggedIn = true;
-    res.redirect('/home');
+    if (!error.isEmpty()) {
+
+        req.flash("validError", error.array());
+        return res.redirect("/login")
+    }
+    next();
+}
+
+const LoginUser = async (req, res) => {
+    try {
+
+        let user = await User.findByCredentials(req.body.username, req.body.password);
+        console.log("The user is ", user);
+        req.session.isLoggedIn = true;
+        req.session.user = user;
+        res.session.save((err) => {
+            if (err)
+                console.log(err);
+            res.redirect('/home');
+        })
+    } catch (e) {
+        req.flash("error", "INVALID USERNAME OR PASSWORD!");
+        res.redirect('/login');
+    }
+
 }
 
 
@@ -124,7 +173,7 @@ const SigupUser = async (req, res) => {
         let token = await user.getAuthToken();
 
         // return res.status(201).send({ user, token });
-        console.log("We are at problem")
+
         req.flash("message", "User is sucessfully registered");
         req.isLoggedIn = true;
         res.redirect('/login')
@@ -209,5 +258,7 @@ module.exports = {
     UserValidation,
     validSignupArray,
     LoginUser,
-    PostLogout
+    PostLogout,
+    validLoginArray,
+    UserLoginValidation
 }

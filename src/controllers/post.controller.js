@@ -22,7 +22,7 @@ const GetAllPosts = async (req, res) => {
             .sort({
                 createdAt: -1
             }).exec();
-        //res.send({posts});    
+        //res.send({posts});  
         res.render('Posts', {
             posts,
             path: '/posts',
@@ -31,6 +31,27 @@ const GetAllPosts = async (req, res) => {
     } catch (e) {
         res.status(404).send(e);
     }
+}
+
+const BlogPosts = async (req, res) => {
+    let isLoggedIn = req.session.isLoggedIn;
+    let user = req.user;
+    if (!user)
+        res.redirect("/login");
+    const posts = await Post.find({
+        userId: user._id
+    }).populate({
+        path: 'userId'
+    }).sort({
+        createdAt: -1
+    }).exec();
+
+    res.render('BlogPost', {
+        path: '/blogpost',
+        isAuthenticate: isLoggedIn,
+        user,
+        posts
+    })
 }
 
 const getAUserPosts = async (req, res) => {
@@ -49,16 +70,11 @@ const getAUserPosts = async (req, res) => {
     }
 }
 
-const BlogPosts = (req, res) => {
-    let isLoggedIn = req.session.isLoggedIn;
-    res.render('BlogPost', {
-        path: '/blogpost',
-        isAuthenticate: isLoggedIn
-    })
-}
+
 
 const GetAPostDetail = async (req, res) => {
     let id = req.params.id.trim();
+    let isLoggedIn = req.session.isLoggedIn;
     console.log(id);
     try {
         let postDetail = await Post.findOne({
@@ -69,7 +85,8 @@ const GetAPostDetail = async (req, res) => {
 
         res.render('PostDetail', {
             postDetail,
-            path: null
+            path: null,
+            isAuthenticate: isLoggedIn
         })
     } catch (e) {
         res.status(404).send(e);

@@ -4,12 +4,11 @@
 
     <div class="ui container">
         <% if(message) { %>
-        <div class="ui success message">
+        <div class="ui negative message">
             <i class="close icon"></i>
             <div class="header">
-                Your user registration was successful.
+                <%= message[0] %>
             </div>
-            <p>You may now log-in with the username you have chosen</p>
         </div>
         <% } %>
         <form action="/login" method="POST" class="ui form">
@@ -22,7 +21,12 @@
                 <div class="three column row">
                     <div class="field column">
                         <label for="">Username</label>
-                        <input type="text" name="Username" id="Username">
+                        <input type="text" name="username" id="Username">
+                        <% if(usernameMessage) { %>
+                        <div class="ui pointing red basic label">
+                            <%=usernameMessage %>
+                        </div>
+                        <% } %>
                     </div>
                 </div>
 
@@ -30,6 +34,12 @@
                     <div class="field column">
                         <label for="">Password</label>
                         <input type="password" name="password">
+                        <% if(passwordMessage) { %>
+                        <div class="ui pointing red basic label">
+                            <%=passwordMessage %>
+                        </div>
+
+                        <% } %>
                     </div>
                 </div>
 

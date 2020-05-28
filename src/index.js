@@ -8,6 +8,7 @@ const userRoute = require("./routes/user.route");
 const aboutRoute = require("./routes/about.route");
 const homeRoute = require("./routes/home.route");
 const blogPostRoute = require("./routes/post.route");
+const User = require("./models/user");
 const app = express();
 const MongoDbURI = "mongodb://127.0.0.1:27017/blogging";
 
@@ -42,6 +43,18 @@ app.use(session({
     store: store,
     unset: 'destroy'
 }))
+app.use((req, res, next) => {
+    if (!req.session.user) {
+        return next();
+    }
+    User.findById(req.session.user._id)
+        .then(user => {
+            console.log(user);
+            req.user = user;
+            next();
+        })
+        .catch(err => console.log(err));
+});
 
 app.use(require('connect-flash')());
 app.use(function (req, res, next) {
@@ -56,8 +69,11 @@ app.use(blogPostRoute);
 app.use(userRoute);
 
 app.use("*", (req, res) => {
+
     res.status(404).render("pageNotFound", {
-        msg: "Page was not there"
+        msg: "Page was not there",
+        path: "*",
+        isAuthenticate: req.session.isLoggedIn
     });
 })
 
