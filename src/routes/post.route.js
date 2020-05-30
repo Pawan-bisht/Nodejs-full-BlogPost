@@ -9,11 +9,21 @@ router.route("/blogpost")
       .get(blogCtrl.BlogPosts)
 
 router.route('/posts')
-      .get(blogCtrl.GetAllPosts)      
+      .get(blogCtrl.GetAllPosts)
 
 router.route('/post/:id')
-      .get(blogCtrl.GetAPostDetail)      
+      .get(blogCtrl.GetAPostDetail)
+
 router.route("/getposts/:id")
-      .get(blogCtrl.getAUserPosts)  
-          
+      .get(blogCtrl.getAUserPosts)
+
+router.route('/postComments/:id')
+      .get(blogCtrl.getAllCommentInAPost)
+
+router.route('/postAComment/:id')
+      .post(blogCtrl.CreateACommentInAPost)
+
+router.route('/getAllComment/:id')
+      .get(blogCtrl.getAllReplyOfAComment);
+
 module.exports = router;

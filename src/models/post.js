@@ -1,26 +1,31 @@
 const mongoose = require("mongoose");
 
 const postSchema = new mongoose.Schema({
-    title :{
-        type : String,
-        trim : true,
-        unique : [true, "The required title is already there"],
-        required : true
+    title: {
+        type: String,
+        trim: true,
+        unique: [true, "The required title is already there"],
+        required: true
     },
-    description : {
-        type : String,
-        trim : true,
-        required : true
+    description: {
+        type: String,
+        trim: true,
+        required: true
     },
-    userId : {
-        type :  mongoose.Schema.Types.ObjectId,
-        ref :   'User',
-        required : true
+    userId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
-}, 
-    {
-    timestamps : true
-    });
+}, {
+    timestamps: true
+});
 
-const postModel = new mongoose.model('Post',postSchema);
+postSchema.virtual('comments', {
+    ref: 'Comment',
+    localField: '_id',
+    foreignField: 'post'
+})
+
+const postModel = new mongoose.model('Post', postSchema);
 module.exports = postModel;

@@ -8,7 +8,6 @@ const User = require("../models/user");
 
 //------------Logout Controller-------------------------
 const PostLogout = (req, res) => {
-    console.log("Inside of logout", req.session.isLoggedIn);
     // if (req.session) {
 
     //     req.session.destroy((err) => {
@@ -22,8 +21,7 @@ const PostLogout = (req, res) => {
     //     })
     // }
     req.session = null;
-    console.log(req.session);
-    res.redirect("/signup")
+    res.redirect("/login")
 }
 
 
@@ -56,7 +54,6 @@ const GetLogin = (req, res) => {
         })
     }
     let message = req.flash("error");
-    console.log(errorMessage);
     if (message.length === 0)
         message = null;
     // console.log(req.get("Cookie"));
@@ -91,7 +88,6 @@ const LoginUser = async (req, res) => {
     try {
 
         let user = await User.findByCredentials(req.body.username, req.body.password);
-        console.log("The user is ", user);
         req.session.isLoggedIn = true;
         req.session.user = user;
         res.session.save((err) => {
@@ -147,7 +143,6 @@ const UserValidation = (req, res, next) => {
 const SigupUser = async (req, res) => {
     const user = new User(req.body);
     try {
-        console.log(2);
         const findUser = await User.findOne({
             $or: [{
                     email: req.body.email
@@ -157,9 +152,7 @@ const SigupUser = async (req, res) => {
                 }
             ]
         });
-        console.log("user at", findUser)
         if (findUser) {
-            console.log("user is ", findUser)
             if (findUser.username == req.body.username) {
                 req.flash("errorExist", "Username is already occupied Please type another one");
                 return res.redirect('/signup');
@@ -169,16 +162,15 @@ const SigupUser = async (req, res) => {
             }
         }
 
-        console.log(5);
-        let token = await user.getAuthToken();
+
+        // let token = await user.getAuthToken();
 
         // return res.status(201).send({ user, token });
 
         req.flash("message", "User is sucessfully registered");
-        req.isLoggedIn = true;
+        await user.save();
         res.redirect('/login')
     } catch (e) {
-        console.log("3");
         res.status(400).redirect('/signup');
     }
 }
@@ -214,7 +206,6 @@ const SignUpPage = (req, res) => {
         })
     }
     let existMsg = req.flash("errorExist");
-    console.log(existMsg);
     let isLoggedIn = req.session.isLoggedIn;
     let emailExistedMsg = null,
         usernameExistedMsg = null;
@@ -235,8 +226,6 @@ const SignUpPage = (req, res) => {
     });
 }
 
-
-
 const SignOut = async (req, res) => {
 
     try {
@@ -251,6 +240,23 @@ const SignOut = async (req, res) => {
     }
 }
 
+const DeleteUser = async (req, res) => {
+    let user = req.session.user;
+    user = new User(user);
+    await user.remove();
+    res.redirect('/logout');
+}
+
+const GetDelete = (req, res) => {
+    let isLoggedIn = req.session.isLoggedIn;
+    let user = req.session.user;
+
+    res.render('DeleteUser', {
+        path: '/delete',
+        isAuthenticate: isLoggedIn,
+    })
+}
+
 module.exports = {
     SigupUser,
     GetLogin,
@@ -260,5 +266,7 @@ module.exports = {
     LoginUser,
     PostLogout,
     validLoginArray,
-    UserLoginValidation
+    UserLoginValidation,
+    DeleteUser,
+    GetDelete
 }

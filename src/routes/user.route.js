@@ -18,4 +18,7 @@ router.route('/signup')
 router.route('/logout')
       .get(userCtrl.PostLogout)
 
+router.route("/delete")
+      .post(userCtrl.DeleteUser)
+      .get(userCtrl.GetDelete)
 module.exports = router;

@@ -1,5 +1,6 @@
 const mongooose = require("mongoose");
 const jwt = require("jsonwebtoken");
+const Post = require("./post");
 const bcrypt = require("bcrypt");
 const configuration = require("../config/Auth.config");
 const userSchema = new mongooose.Schema({
@@ -97,6 +98,13 @@ userSchema.statics.findByCredentials = async (username, password) => {
 
     return user;
 }
+userSchema.pre('remove', async function (next) {
+    let user = this;
+    await Post.deleteMany({
+        userId: user._id
+    });
+    next();
+})
 const userModel = new mongooose.model('User', userSchema);
 
 module.exports = userModel;
